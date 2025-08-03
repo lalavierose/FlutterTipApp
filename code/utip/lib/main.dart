@@ -30,6 +30,30 @@ class UTip extends StatefulWidget {
 }
 
 class _UTipState extends State<UTip> {
+
+  int personCount =1;
+  double sliderValue;
+  int billAmount = 0;
+
+  int tipAmount = sliderValue * billAmount;
+  int totalAmount = ((tipAmount + billAmount) + billAmount) /personCount;
+
+  //methods
+  void personIncrement(){
+    setState((){
+      personCount++;
+    });
+  }
+
+  void personDecrement(){
+    setState((){
+      if (personCount > 1){
+        personCount--;
+      }
+      
+    })
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +84,7 @@ class _UTipState extends State<UTip> {
                         ), 
                         ),
                     Text(
-                      "\$123",
+                      "\$ $totalAmount",
                       style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -87,8 +111,12 @@ class _UTipState extends State<UTip> {
                         margin: EdgeInsets.all(10.0),
                         child: TextField(
                           keyboardType: TextInputType.number,
-                          onChanged: (String value) {
-                            
+                          onChanged: (value) {
+                            setState((){
+                              billAmount = value;
+                              totalAmount;
+                            })
+                      
                           },
                           decoration: InputDecoration(
                             labelText: "Bill Amount",
@@ -103,26 +131,40 @@ class _UTipState extends State<UTip> {
                           Text("Split"),
                           Row(
                             children: [
-                              IconButton(onPressed: ()=>{}, icon: Icon(Icons.remove)),
-                              Text("ppl"),
-                              IconButton(onPressed: ()=>{}, icon: Icon(Icons.add)),
+                              IconButton(onPressed: personDecrement(), icon: Icon(Icons.remove)),
+                              Text("$personCount"),
+                              IconButton(onPressed: personIncrement(), icon: Icon(Icons.add)),
                             ],
                           ),
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("Tip",
                           style: TextStyle(
 
                           ), 
                           ),
-                          
-                          Text("Tip Amount"),
+
+                          //Tip Amount
+                          Text("\$ $tipAmount"),
                         ],
                       ),
-                      Text("Tip Percentage"),
-                     Text("Percentage Slider") 
+                      Text("${(sliderValue*100).round}%"),
+                      Slider (
+                        min: 0,
+                        max: 0.5,
+                        divisions: 5,
+                        value:  sliderValue,
+                        onChanged: (value) => {
+                          setState((){
+                            sliderValue = value;
+                          })
+                          
+                        }
+                      )
+                        
                 
                     ],
                 
